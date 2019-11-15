@@ -13,11 +13,27 @@ const upload = gcsUpload({
     }
   })
 
+
+  const authorization = (req,res,next)=>{
+      if(req.loggedUser.role === 'admin'){
+          next()
+      }else{
+          next({
+              status : 401,
+              message : 'unauthorized user'
+          })
+      }
+  }
+
+
 router.get('/',productController.showAll)
 
 router.use(authentication)
 
 router.get('/:id',productController.findOne)
+
+router.use('/',authorization)
+
 router.post('/',upload.array('images'),productController.create)
 router.delete('/:id',productController.delete)
 router.put('/:id',upload.array('images'),productController.update)

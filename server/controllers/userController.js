@@ -2,6 +2,7 @@ const User = require('../models/user')
 const hashPassword = require('../helpers/passwordGenerator').hashPassword
 const verifyPassword = require('../helpers/passwordGenerator').verifyPassword
 const tokenGenerator = require('../helpers/tokenGenerator').generateToken
+const Product = require('../models/product')
 
 class UserController {
     static register(req,res,next){
@@ -34,7 +35,8 @@ class UserController {
                 if(verifyPassword(req.body.password, user.password)){
                     let payloads = {
                         id : user._id,
-                        email : user.email
+                        email : user.email,
+                        role : user.role
                     }
                     let token = tokenGenerator(payloads)
                     res.status(200).json(token)
